@@ -8,6 +8,9 @@ import com.example.product.enums.ResultEnum;
 import com.example.product.exception.ProductException;
 import com.example.product.repository.ProductInfoRepository;
 import com.example.product.service.ProductService;
+import com.example.product.utils.JsonUtil;
+import com.rabbitmq.tools.json.JSONUtil;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +48,11 @@ public class ProductServiceImpl implements ProductService {
                 }).collect(Collectors.toList());
     }
 
+//    public void decreaseStocke(List<DecreaseStockInput> decreaseStockInputList){
+//        List<ProductInfo> productInfoList= decreaseStockProcess(decreaseStockInputList);
+//
+//    }
+
     @Override
     @Transactional
     public List<ProductInfo> decreaseStock(List<DecreaseStockInput> decreaseStockInputsList){
@@ -63,7 +71,12 @@ public class ProductServiceImpl implements ProductService {
             }
             productInfo.setProductStock(result);
             productInfoRepository.save(productInfo);
+//            amqpTemplate.convertAndSend("productInfo", JsonUtil.toJson(productInfo));
+
+
             productInfoList.add(productInfo);
+
+
         }
         return productInfoList;
     }

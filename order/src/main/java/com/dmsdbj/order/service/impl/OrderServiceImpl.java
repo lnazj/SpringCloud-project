@@ -1,6 +1,5 @@
 package com.dmsdbj.order.service.impl;
 
-import com.dmsdbj.order.client.ProductClient;
 import com.dmsdbj.order.dataobject.OrderDetail;
 import com.dmsdbj.order.dataobject.OrderMaster;
 import com.dmsdbj.order.dataobject.ProductInfo;
@@ -18,9 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
+//    @Autowired
+//    private ProductClient productClient;
+
 
     @Override
     /**
@@ -53,8 +57,8 @@ public class OrderServiceImpl implements OrderService {
         List<String> productIdList=orderDTO.getOrderDetailList().stream()
                 .map(OrderDetail::getProductId)
                 .collect(Collectors.toList());
-        List<ProductInfo> productInfoList=productClient.findList(productIdList);
-
+//        List<ProductInfo> productInfoList=productClient.findList(productIdList);
+        List<ProductInfo> productInfoList=new ArrayList<>();
          // 计算总价
         BigDecimal orderAmout=new BigDecimal(BigInteger.ZERO);
         for(OrderDetail orderDetail:orderDTO.getOrderDetailList()){
@@ -75,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
         List<CartDTO> cartDTOList=orderDTO.getOrderDetailList().stream()
                 .map(e -> new CartDTO(e.getProductId(),e.getProductQuantity()))
                 .collect(Collectors.toList());
-        productClient.decreaseStock(cartDTOList);
+//        productClient.decreaseStock(cartDTOList);
 
        //  订单入库
         OrderMaster orderMaster=new OrderMaster();

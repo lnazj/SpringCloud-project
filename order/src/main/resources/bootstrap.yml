@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: order
+# order服务需要先注册进eureka，所以把注册eureka的拿出来
+#通过service-id: CONFIG指定配置文件服务，通过eureka访问配置文件服务应用（轮询），
+#从git指定的地址上拉取名字为name-profile配置文件
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: CONFIG
+      profile: dev
+
+eureka:
+  client:
+    service-url:
+       defaultZone: http://localhost:8762/eureka/
+
+feign:
+   hystrix:
+     enabled: true
+
+#PRODUCT:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
